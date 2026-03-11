@@ -88,6 +88,29 @@
   }
 }
 
+@keyframes liquid-float {
+
+  0%,
+  100% {
+    transform: translateY(0) skew(0deg);
+    filter: blur(0px);
+  }
+
+  33% {
+    transform: translateY(-10px) skew(2deg);
+    filter: blur(2px);
+  }
+
+  66% {
+    transform: translateY(5px) skew(-2deg);
+    filter: blur(1px);
+  }
+}
+
+.animate-liquid {
+  animation: liquid-float 8s infinite ease-in-out;
+}
+
 .animate-vortex-spin {
   animation: vortex-spin 4s infinite linear;
 }
@@ -96,22 +119,46 @@
   animation: spin-slow 10s linear infinite;
 }
 
-/* Custom Webkit Scrollbar */
+/* Hide default scrollbar but keep functionality */
 ::-webkit-scrollbar {
-  width: 8px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #262626;
-  border-radius: 4px;
+/* The Chrono-Gauge (Visual Treat #16) */
+.chrono-gauge {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 200px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 2000;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+.chrono-bar {
+  width: 100%;
+  background: #cfa670;
+  transition: height 0.3s ease-out;
+  box-shadow: 0 0 15px rgba(207, 166, 112, 0.5);
+}
+
+.chrono-label {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #cfa670;
+  opacity: 0.6;
 }
 
 /* Custom Cursor default hides the normal cursor */

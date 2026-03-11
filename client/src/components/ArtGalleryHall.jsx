@@ -54,7 +54,7 @@ export default function ArtGalleryHall({ index, hall }) {
         <div className="w-full max-w-7xl mx-auto h-full flex flex-col items-center justify-center p-8 relative">
             <VortexTransition isActive={isVortexActive} onComplete={onVortexComplete} />
 
-            <div className={`absolute top-20 left-10 opacity-20 text-[10vw] font-display font-light pointer-events-none whitespace-nowrap z-0 transition-all duration-1000 ${hall.id === 'renaissance' && eraShift === 2 ? 'text-blue-500 blur-md' : 'text-white'}`}>
+            <div className={`absolute top-20 left-10 opacity-20 text-[10vw] font-display font-light pointer-events-none whitespace-nowrap z-0 transition-all duration-1000 animate-liquid ${hall.id === 'renaissance' && eraShift === 2 ? 'text-blue-500 blur-md' : 'text-white'}`}>
                 {hall.id === 'renaissance' ? eras[eraShift] : hall.title}
             </div>
 

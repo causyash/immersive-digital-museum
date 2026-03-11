@@ -4,6 +4,36 @@ import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 import HiddenVault from './HiddenVault';
 
+function CosmicDust() {
+    const points = useMemo(() => {
+        const p = new Float32Array(2000 * 3);
+        const s = new Float32Array(2000);
+        for (let i = 0; i < 2000; i++) {
+            p[i * 3] = (Math.random() - 0.5) * 50;
+            p[i * 3 + 1] = (Math.random() - 0.5) * 30;
+            p[i * 3 + 2] = (Math.random() - 0.5) * 150;
+            s[i] = Math.random() * 0.05;
+        }
+        return { positions: p, sizes: s };
+    }, []);
+
+    const pointsRef = useRef();
+    useFrame((state) => {
+        const time = state.clock.elapsedTime * 0.1;
+        pointsRef.current.rotation.y = time * 0.2;
+        pointsRef.current.rotation.z = time * 0.1;
+    });
+
+    return (
+        <points ref={pointsRef}>
+            <bufferGeometry>
+                <bufferAttribute attach="attributes-position" count={points.positions.length / 3} array={points.positions} itemSize={3} />
+            </bufferGeometry>
+            <pointsMaterial size={0.05} color="#cfa670" transparent opacity={0.3} sizeAttenuation />
+        </points>
+    );
+}
+
 function Hallway() {
     const groupRef = useRef();
 
@@ -14,6 +44,8 @@ function Hallway() {
 
     return (
         <group ref={groupRef} position={[0, -2, 0]}>
+            <CosmicDust />
+            {/* Floor with reflection */}
             {/* Floor with reflection */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
                 <planeGeometry args={[width, length]} />
@@ -80,6 +112,9 @@ function Hallway() {
 }
 
 function CameraRig({ scrollProgress, isVaultOpen }) {
+    const prevZ = useRef(10);
+    const scrollVelocity = useRef(0);
+
     useFrame((state) => {
         if (isVaultOpen) {
             // Idea 5 & Idea 1: Plunge into the shattered underground vault
@@ -100,13 +135,17 @@ function CameraRig({ scrollProgress, isVaultOpen }) {
             // Normal horizontal walk logic through 6 halls
             const targetZ = 10 - (scrollProgress * 90);
 
+            // Physics Recoil Logic (Visual Treat #10)
+            const diff = targetZ - state.camera.position.z;
+            scrollVelocity.current = THREE.MathUtils.lerp(scrollVelocity.current, diff * 0.1, 0.1);
+
             // IF we were in the vault (y < -10) and it closed, we BLAST UP
             if (state.camera.position.y < -5) {
                 state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 2, 0.08);
                 state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, Math.PI / 4, 0.1); // Look UP while blasting
             } else {
-                state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
-                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0, 0.1);
+                state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05 + (scrollVelocity.current * 0.2);
+                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, -scrollVelocity.current * 0.05, 0.1);
             }
 
             state.camera.position.z += (targetZ - state.camera.position.z) * 0.05;

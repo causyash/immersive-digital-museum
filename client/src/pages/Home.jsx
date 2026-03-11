@@ -132,6 +132,20 @@ export default function Home() {
                 <SceneManager scrollProgress={activeIndex / (halls.length - 1)} isVaultOpen={isVaultOpen} />
             </div>
 
+            {/* The Chrono-Gauge (Visual Treat #16) */}
+            {!isVaultOpen && (
+                <div className="chrono-gauge">
+                    <div
+                        className="chrono-bar"
+                        style={{ height: `${(activeIndex / (halls.length - 1)) * 100}%` }}
+                    />
+                    <div className="chrono-label">
+                        -{Math.floor(2000 - (activeIndex * 800))} YR
+                    </div>
+                </div>
+            )}
+
+            {/* Hall Content (Scrollable layers) */}
             <div style={{ opacity: isVaultOpen ? 0 : 1, pointerEvents: isVaultOpen ? 'none' : 'auto', transition: 'opacity 1s ease' }} className="z-50 relative">
                 <NavigationMap activeIndex={activeIndex} isOutro={isOutro} />
             </div>
