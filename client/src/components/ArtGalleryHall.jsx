@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import FluidArtwork from './FluidArtwork';
+import ParticleArtwork from './ParticleArtwork';
 
 const dummyImages = [
     '/ancient.png',
@@ -56,7 +56,11 @@ export default function ArtGalleryHall({ index, hall }) {
                         <div className="w-full h-full">
                             <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
                                 <ambientLight intensity={1.5} />
-                                <FluidArtwork imageUrl={imageUrl} />
+                                {hall.id === 'ai' ? (
+                                    <ParticleArtwork imageUrl={imageUrl} isActive={true} />
+                                ) : (
+                                    <FluidArtwork imageUrl={imageUrl} />
+                                )}
                             </Canvas>
                         </div>
 
