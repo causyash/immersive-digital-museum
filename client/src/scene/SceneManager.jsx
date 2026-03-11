@@ -54,8 +54,22 @@ function Hallway() {
 
             {Array.from({ length: 12 }).map((_, i) => (
                 <group key={i} position={[0, height, -50 + i * 10]}>
-                    <spotLight position={[-width / 2 + 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" />
-                    <spotLight position={[width / 2 - 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" />
+                    <spotLight
+                        position={[-width / 2 + 2, 0, 0]}
+                        angle={0.4}
+                        penumbra={1}
+                        intensity={15 + Math.sin(Date.now() * 0.001 + i) * 2}
+                        distance={20}
+                        color="#fcdba3"
+                    />
+                    <spotLight
+                        position={[width / 2 - 2, 0, 0]}
+                        angle={0.4}
+                        penumbra={1}
+                        intensity={15 + Math.cos(Date.now() * 0.001 + i) * 2}
+                        distance={20}
+                        color="#fcdba3"
+                    />
                 </group>
             ))}
 
@@ -85,17 +99,26 @@ function CameraRig({ scrollProgress, isVaultOpen }) {
         } else {
             // Normal horizontal walk logic through 6 halls
             const targetZ = 10 - (scrollProgress * 90);
+
+            // IF we were in the vault (y < -10) and it closed, we BLAST UP
+            if (state.camera.position.y < -5) {
+                state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 2, 0.08);
+                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, Math.PI / 4, 0.1); // Look UP while blasting
+            } else {
+                state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0, 0.1);
+            }
+
             state.camera.position.z += (targetZ - state.camera.position.z) * 0.05;
 
             // Add subtle walking sway
-            state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+            // state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
 
             // Slightly tilt camera left right for realism
             const targetRotY = Math.sin(state.clock.elapsedTime * 1.5) * 0.02;
             state.camera.rotation.y += (targetRotY - state.camera.rotation.y) * 0.1;
 
             // Revert dive mechanisms safely
-            state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0, 0.1);
             state.camera.rotation.z = THREE.MathUtils.lerp(state.camera.rotation.z, 0, 0.1);
         }
     });

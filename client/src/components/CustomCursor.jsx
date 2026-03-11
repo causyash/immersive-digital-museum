@@ -49,9 +49,15 @@ export default function CustomCursor() {
         <>
             <div
                 ref={cursorRef}
-                className="fixed top-0 left-0 w-8 h-8 rounded-full border border-museum-accent/50 pointer-events-none z-[9999] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center backdrop-blur-sm transition-colors duration-300"
+                className="fixed top-0 left-0 w-8 h-8 rounded-full border border-museum-accent/50 pointer-events-none z-[9999] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center backdrop-blur-sm transition-colors duration-300 pointer-events-none"
             >
-                {hoverText && <span className="text-[5px] font-bold tracking-widest uppercase text-white scale-33">{hoverText}</span>}
+                {hoverText && (
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <span className="text-[6px] font-bold tracking-[0.2em] uppercase text-white animate-spin-slow">
+                            {hoverText}
+                        </span>
+                    </div>
+                )}
             </div>
             <div
                 ref={dotRef}

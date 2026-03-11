@@ -123,6 +123,10 @@ export default function Home() {
 
     return (
         <div className="bg-museum-bg text-museum-text">
+            {/* Cinematic Overlays */}
+            <div className="vignette" />
+            <div className="film-grain" />
+
             {/* 3D Scene permanently fixed in background */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <SceneManager scrollProgress={activeIndex / (halls.length - 1)} isVaultOpen={isVaultOpen} />

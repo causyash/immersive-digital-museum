@@ -8,7 +8,7 @@ export default function NavigationMap({ activeIndex = 0, isOutro = false }) {
                     {halls.map((hall, index) => (
                         <div key={index} className="flex items-center flex-shrink-0 transition-all duration-700" style={{ gap: isOutro ? '0px' : '16px' }}>
                             <div className="flex flex-col items-center group relative">
-                                <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isOutro ? 'bg-museum-accent scale-100 shadow-[0_0_15px_rgba(207,166,112,1)]' : index === activeIndex ? 'bg-museum-accent scale-150 shadow-[0_0_10px_rgba(207,166,112,0.8)]' : 'bg-museum-muted'}`} />
+                                <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isOutro ? 'bg-museum-accent scale-100 shadow-[0_0_15px_rgba(207,166,112,1)]' : index === activeIndex ? 'bg-museum-accent scale-150 shadow-[0_0_10px_rgba(207,166,112,0.8)] dot-active' : 'bg-museum-muted'}`} />
                                 <span className={`text-xs mt-2 uppercase tracking-[0.2em] font-display font-light absolute top-6 transition-opacity duration-300 ${!isOutro && index === activeIndex ? 'text-museum-accent opacity-100' : 'opacity-0 text-museum-muted'}`}>
                                     {hall}
                                 </span>
