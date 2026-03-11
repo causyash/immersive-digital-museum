@@ -71,6 +71,27 @@
   }
 }
 
+@keyframes vortex-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.animate-vortex-spin {
+  animation: vortex-spin 4s infinite linear;
+}
+
 .animate-spin-slow {
   animation: spin-slow 10s linear infinite;
 }
