@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 import { Link } from 'react-router-dom';
 
@@ -13,36 +13,49 @@ const archiveArtworks = [
 
 export default function VaultArchive({ isVisible, onClose }) {
     const [render, setRender] = useState(false);
+    const vaultRef = useRef(null);
+    const itemsRef = useRef([]);
 
     useEffect(() => {
         if (isVisible) {
             setRender(true);
-            setTimeout(() => {
-                gsap.to('.vault-ui', {
-                    opacity: 1,
-                    duration: 2,
-                    ease: 'power2.out'
-                });
-
-                gsap.fromTo('.vault-item',
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 1, stagger: 0.1, delay: 1, ease: 'power3.out' }
-                );
-            }, 50);
         } else {
-            gsap.to('.vault-ui', {
-                opacity: 0,
-                duration: 1,
-                ease: 'power2.in',
-                onComplete: () => setRender(false)
-            });
+            if (vaultRef.current) {
+                gsap.to(vaultRef.current, {
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: 'power2.in',
+                    onComplete: () => setRender(false)
+                });
+            }
         }
     }, [isVisible]);
+
+    useEffect(() => {
+        if (render && isVisible && vaultRef.current) {
+            gsap.to(vaultRef.current, {
+                opacity: 1,
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
+            if (itemsRef.current.length > 0) {
+                gsap.fromTo(itemsRef.current,
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1, stagger: 0.1, delay: 0.5, ease: 'power3.out' }
+                );
+            }
+        }
+    }, [render, isVisible]);
 
     if (!render) return null;
 
     return (
-        <div className="vault-ui fixed inset-0 z-[100] opacity-0 pointer-events-auto overflow-y-auto custom-scrollbar">
+        <div
+            ref={vaultRef}
+            data-lenis-prevent
+            className="vault-ui fixed inset-0 z-[100] opacity-0 pointer-events-auto overflow-y-auto custom-scrollbar bg-black/40 backdrop-blur-[2px]"
+        >
             <div className="min-h-screen w-full flex flex-col p-8 md:p-16 pt-32 relative">
 
                 {/* Header */}
@@ -62,7 +75,11 @@ export default function VaultArchive({ isVisible, onClose }) {
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto w-full pb-32">
                     {archiveArtworks.map((art, i) => (
-                        <div key={i} className="vault-item group block cursor-pointer">
+                        <div
+                            key={i}
+                            ref={el => itemsRef.current[i] = el}
+                            className="vault-item group block cursor-pointer"
+                        >
                             <div className="w-full aspect-square bg-[#050505] overflow-hidden border border-white/5 relative mb-4">
                                 <img src={art.img} alt={art.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 filter grayscale group-hover:grayscale-0" />
                                 <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay pointer-events-none"></div>

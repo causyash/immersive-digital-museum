@@ -88,6 +88,7 @@ export default function Home() {
 
         // Disable scroll locally
         document.body.style.overflow = 'hidden';
+        if (window.lenis) window.lenis.stop();
 
         // Animate the mask away to reveal the ThreeJS plunge beneath it
         gsap.to('.outro-trigger', {
@@ -110,6 +111,7 @@ export default function Home() {
 
         // Restore horizontal scroll mechanics
         document.body.style.overflow = 'auto';
+        if (window.lenis) window.lenis.start();
 
         // Animate black screen back in to restore regular navigation
         const outroTrigger = document.querySelector('.outro-trigger');

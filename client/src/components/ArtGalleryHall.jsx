@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { Canvas } from '@react-three/fiber';
+import FluidArtwork from './FluidArtwork';
 
 const dummyImages = [
     '/ancient.png',
@@ -51,7 +53,12 @@ export default function ArtGalleryHall({ index, hall }) {
                 >
                     <div className="relative aspect-[3/4] bg-[#020202] border-[12px] border-[#111] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
 
-                        <img src={imageUrl} className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" alt="Artwork" />
+                        <div className="w-full h-full">
+                            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+                                <ambientLight intensity={1.5} />
+                                <FluidArtwork imageUrl={imageUrl} />
+                            </Canvas>
+                        </div>
 
                         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20 pointer-events-none">
                             <h3 className="text-2xl font-display">Masterpiece #{index + 1}</h3>

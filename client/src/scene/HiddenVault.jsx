@@ -1,5 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { MeshReflectorMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 export default function HiddenVault() {
@@ -54,7 +55,18 @@ export default function HiddenVault() {
             {/* Vault Endless Reflective Floor */}
             <mesh position={[0, -15, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                 <planeGeometry args={[200, 200]} />
-                <meshStandardMaterial color="#020202" roughness={0.02} metalness={0.9} />
+                <MeshReflectorMaterial
+                    blur={[300, 100]}
+                    resolution={1024}
+                    mixBlur={1}
+                    mixStrength={60}
+                    roughness={1}
+                    depthScale={1.2}
+                    minDepthThreshold={0.4}
+                    maxDepthThreshold={1.4}
+                    color="#050505"
+                    metalness={0.9}
+                />
             </mesh>
 
             <group ref={groupRef}>
