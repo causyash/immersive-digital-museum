@@ -64,7 +64,7 @@ export default function ArtGalleryHall({ index, hall }) {
                         {hall.id === 'renaissance' ? `${eras[eraShift]} Era` : hall.title}
                     </h2>
                     <p className="text-museum-muted text-lg tracking-wide max-w-md">
-                        Explore the timeless pieces spanning history. Notice the masterful strokes and depth that continue to inspire.
+                        {hall.description}
                     </p>
 
                     {hall.id === 'renaissance' && (

@@ -86,22 +86,8 @@ function Hallway() {
 
             {Array.from({ length: 12 }).map((_, i) => (
                 <group key={i} position={[0, height, -50 + i * 10]}>
-                    <spotLight
-                        position={[-width / 2 + 2, 0, 0]}
-                        angle={0.4}
-                        penumbra={1}
-                        intensity={15 + Math.sin(Date.now() * 0.001 + i) * 2}
-                        distance={20}
-                        color="#fcdba3"
-                    />
-                    <spotLight
-                        position={[width / 2 - 2, 0, 0]}
-                        angle={0.4}
-                        penumbra={1}
-                        intensity={15 + Math.cos(Date.now() * 0.001 + i) * 2}
-                        distance={20}
-                        color="#fcdba3"
-                    />
+                    <BreathingLight position={[-width / 2 + 2, 0, 0]} color="#fcdba3" offset={i} />
+                    <BreathingLight position={[width / 2 - 2, 0, 0]} color="#fcdba3" offset={i + 0.5} />
                 </group>
             ))}
 

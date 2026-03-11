@@ -1,5 +1,5 @@
-export default function NavigationMap({ activeIndex = 0, isOutro = false }) {
-    const halls = ['Ancient', 'Renaissance', 'Modern', 'Digital', 'AI'];
+export default function NavigationMap({ activeIndex = 0, isOutro = false, halls = [] }) {
+    if (halls.length === 0) return null;
 
     return (
         <div className={`fixed bottom-12 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-700 ease-in-out`}>
@@ -10,7 +10,7 @@ export default function NavigationMap({ activeIndex = 0, isOutro = false }) {
                             <div className="flex flex-col items-center group relative">
                                 <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isOutro ? 'bg-museum-accent scale-100 shadow-[0_0_15px_rgba(207,166,112,1)]' : index === activeIndex ? 'bg-museum-accent scale-150 shadow-[0_0_10px_rgba(207,166,112,0.8)] dot-active' : 'bg-museum-muted'}`} />
                                 <span className={`text-xs mt-2 uppercase tracking-[0.2em] font-display font-light absolute top-6 transition-opacity duration-300 ${!isOutro && index === activeIndex ? 'text-museum-accent opacity-100' : 'opacity-0 text-museum-muted'}`}>
-                                    {hall}
+                                    {hall.title.split(' ')[0]}
                                 </span>
                             </div>
                             {index < halls.length - 1 && (

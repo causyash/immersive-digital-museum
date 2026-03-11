@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import Home from './pages/Home';
 import ArtworkDetail from './pages/ArtworkDetail';
 import AdminDashboard from './pages/AdminDashboard';
+import NeuralLinkLoading from './components/NeuralLinkLoading';
 import CustomCursor from './components/CustomCursor';
 
 function App() {
@@ -36,12 +37,15 @@ function App() {
 
   return (
     <Router>
-      <CustomCursor />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/artwork/:id" element={<ArtworkDetail />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
+      <div className="min-h-screen bg-museum-bg text-museum-text">
+        <NeuralLinkLoading />
+        <CustomCursor />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/artwork/:id" element={<ArtworkDetail />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

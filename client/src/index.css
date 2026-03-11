@@ -61,6 +61,20 @@
   animation: pulse-dot 2s infinite ease-in-out;
 }
 
+@keyframes scan-line {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+.animate-scan-line {
+  animation: scan-line 4s linear infinite;
+}
+
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);

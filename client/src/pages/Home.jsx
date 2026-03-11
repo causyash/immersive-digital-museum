@@ -9,11 +9,11 @@ import VaultArchive from '../components/VaultArchive';
 gsap.registerPlugin(ScrollTrigger);
 
 const halls = [
-    { id: 'ancient', title: 'Ancient Art Hall', theme: 'warm' },
-    { id: 'renaissance', title: 'Renaissance Hall', theme: 'classic' },
-    { id: 'modern', title: 'Modern Art Hall', theme: 'bright' },
-    { id: 'digital', title: 'Digital Art Hall', theme: 'neon' },
-    { id: 'ai', title: 'AI Generated Art Hall', theme: 'futuristic' },
+    { id: 'ancient', title: 'Ancient Art Hall', theme: 'warm', description: 'Witness the genesis of human expression. Before the byte, there was the brush of eternity and the whisper of forgotten gods.' },
+    { id: 'renaissance', title: 'Renaissance Hall', theme: 'classic', description: 'The convergence of logic and divine beauty. An era where light was conquered and the human form reached its geometric zenith.' },
+    { id: 'modern', title: 'Modern Art Hall', theme: 'bright', description: 'The shattering of rules. Witness the birth of abstraction and the kinetic energy of a world in rapid industrial motion.' },
+    { id: 'digital', title: 'Digital Art Hall', theme: 'neon', description: 'The transition from pigment to pixel. Explore the first frontier of code-driven creativity and virtual dreamscapes.' },
+    { id: 'ai', title: 'AI Generated Art Hall', theme: 'futuristic', description: 'The echoes of a synthetic consciousness. Masterpieces woven from the collective memory of humanity by neural machines.' },
 ];
 
 export default function Home() {
@@ -140,14 +140,14 @@ export default function Home() {
                         style={{ height: `${(activeIndex / (halls.length - 1)) * 100}%` }}
                     />
                     <div className="chrono-label">
-                        -{Math.floor(2000 - (activeIndex * 800))} YR
+                        {Math.abs(Math.floor(2000 - (activeIndex * 800)))} {Math.floor(2000 - (activeIndex * 800)) <= 0 ? 'AD' : 'BC'}
                     </div>
                 </div>
             )}
 
             {/* Hall Content (Scrollable layers) */}
             <div style={{ opacity: isVaultOpen ? 0 : 1, pointerEvents: isVaultOpen ? 'none' : 'auto', transition: 'opacity 1s ease' }} className="z-50 relative">
-                <NavigationMap activeIndex={activeIndex} isOutro={isOutro} />
+                <NavigationMap activeIndex={activeIndex} isOutro={isOutro} halls={halls} />
             </div>
 
             <div ref={containerRef} className="relative w-full h-screen z-10">
