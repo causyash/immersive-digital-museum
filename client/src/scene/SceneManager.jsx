@@ -1,8 +1,31 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, PerspectiveCamera, MeshReflectorMaterial } from '@react-three/drei';
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import HiddenVault from './HiddenVault';
+
+function BreathingLight({ position, color, offset }) {
+    const lightRef = useRef();
+
+    useFrame((state) => {
+        if (lightRef.current) {
+            // Use state.clock.getElapsedTime() which is common in fiber
+            lightRef.current.intensity = 15 + Math.sin(state.clock.getElapsedTime() + offset) * 3;
+        }
+    });
+
+    return (
+        <spotLight
+            ref={lightRef}
+            position={position}
+            angle={0.4}
+            penumbra={1}
+            distance={20}
+            color={color}
+        />
+    );
+}
+
 
 function CosmicDust() {
     const points = useMemo(() => {
