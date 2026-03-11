@@ -2,12 +2,13 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, PerspectiveCamera, MeshReflectorMaterial } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
+import HiddenVault from './HiddenVault';
 
 function Hallway() {
     const groupRef = useRef();
 
     // Dimensions
-    const length = 100;
+    const length = 120; // extended for 6 halls
     const width = 20;
     const height = 15;
 
@@ -51,11 +52,10 @@ function Hallway() {
             {/* Ambient Lighting */}
             <ambientLight intensity={0.1} />
 
-            {/* Spotlights for frames along the walls */}
-            {Array.from({ length: 10 }).map((_, i) => (
-                <group key={i} position={[0, height, -40 + i * 10]}>
-                    <spotLight position={[-width / 2 + 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" castShadow />
-                    <spotLight position={[width / 2 - 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" castShadow />
+            {Array.from({ length: 12 }).map((_, i) => (
+                <group key={i} position={[0, height, -50 + i * 10]}>
+                    <spotLight position={[-width / 2 + 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" />
+                    <spotLight position={[width / 2 - 2, 0, 0]} angle={0.4} penumbra={1} intensity={15} distance={20} color="#fcdba3" />
                 </group>
             ))}
 
@@ -65,32 +65,53 @@ function Hallway() {
     );
 }
 
-function CameraRig({ scrollProgress }) {
+function CameraRig({ scrollProgress, isVaultOpen }) {
     useFrame((state) => {
-        // Move camera forward based on scroll (max length ~ 70 units forward)
-        const targetZ = 10 - (scrollProgress * 70);
-        state.camera.position.z += (targetZ - state.camera.position.z) * 0.05;
+        if (isVaultOpen) {
+            // Idea 5 & Idea 1: Plunge into the shattered underground vault
+            state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, -50, 0.04);
+            state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, 0, 0.05);
 
-        // Add subtle walking sway
-        state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+            // Dynamic camera shake as it falls
+            if (state.camera.position.y > -45 && state.camera.position.y < -5) {
+                state.camera.position.x = Math.sin(state.clock.elapsedTime * 40) * 0.3;
+                state.camera.rotation.z = Math.sin(state.clock.elapsedTime * 60) * 0.05;
+                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, -Math.PI / 3, 0.05); // heavy screen dive
+            } else {
+                state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.1);
+                state.camera.rotation.z = THREE.MathUtils.lerp(state.camera.rotation.z, 0, 0.1);
+                state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0.1, 0.05); // Look slightly up to the shattered canvas
+            }
+        } else {
+            // Normal horizontal walk logic through 6 halls
+            const targetZ = 10 - (scrollProgress * 90);
+            state.camera.position.z += (targetZ - state.camera.position.z) * 0.05;
 
-        // Slightly tilt camera left right for realism
-        const targetRotY = Math.sin(state.clock.elapsedTime * 1.5) * 0.02;
-        state.camera.rotation.y += (targetRotY - state.camera.rotation.y) * 0.1;
+            // Add subtle walking sway
+            state.camera.position.y = 2 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+
+            // Slightly tilt camera left right for realism
+            const targetRotY = Math.sin(state.clock.elapsedTime * 1.5) * 0.02;
+            state.camera.rotation.y += (targetRotY - state.camera.rotation.y) * 0.1;
+
+            // Revert dive mechanisms safely
+            state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0, 0.1);
+            state.camera.rotation.z = THREE.MathUtils.lerp(state.camera.rotation.z, 0, 0.1);
+        }
     });
     return null;
 }
 
-export default function SceneManager({ scrollProgress = 0 }) {
+export default function SceneManager({ scrollProgress = 0, isVaultOpen = false }) {
     return (
         <Canvas shadows gl={{ antialias: false, toneMappingExposure: 1.5 }}>
             <PerspectiveCamera makeDefault position={[0, 2, 10]} fov={60} />
             <color attach="background" args={['#050505']} />
 
             <Suspense fallback={null}>
-                <CameraRig scrollProgress={scrollProgress} />
+                <CameraRig scrollProgress={scrollProgress} isVaultOpen={isVaultOpen} />
                 <Hallway />
-                {/* Adds realistic HDRI reflections implicitly, lowering intensity to fit museum mood */}
+                <HiddenVault />
                 <Environment preset="studio" environmentIntensity={0.2} />
             </Suspense>
         </Canvas>

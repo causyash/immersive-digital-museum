@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 
 const dummyImages = [
-    'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?auto=format&fit=crop&q=80&w=800',
-    'https://images.unsplash.com/photo-1577083165313-1bf5ee055db3?auto=format&fit=crop&q=80&w=800',
-    'https://images.unsplash.com/photo-1578301978693-85fa9c026f33?auto=format&fit=crop&q=80&w=800',
-    'https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&q=80&w=800'
+    '/ancient.png',
+    '/renaissance.png',
+    '/modern.png',
+    '/digital.png',
+    '/ai.png'
 ];
 
 export default function ArtGalleryHall({ index, hall }) {
     // Select an image based on the hall index
-    const imageUrl = dummyImages[index % dummyImages.length];
+    const imageUrl = dummyImages[index % dummyImages.length] || dummyImages[0];
 
     const handleMouseMove = (e) => {
         const card = e.currentTarget;
@@ -48,9 +49,11 @@ export default function ArtGalleryHall({ index, hall }) {
                     onMouseLeave={handleMouseLeave}
                     style={{ transition: 'transform 0.1s ease-out' }}
                 >
-                    <div className="relative aspect-[3/4] bg-neutral-900 border-[12px] border-[#111] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div className="relative aspect-[3/4] bg-[#020202] border-[12px] border-[#111] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+
                         <img src={imageUrl} className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" alt="Artwork" />
-                        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20">
+
+                        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20 pointer-events-none">
                             <h3 className="text-2xl font-display">Masterpiece #{index + 1}</h3>
                             <p className="text-museum-accent text-sm uppercase tracking-widest mt-1">View Details</p>
                         </div>
